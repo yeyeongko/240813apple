@@ -24,7 +24,7 @@ def get_recommendations(preferences):
     return matched_recommendations
 
 # 웹 앱 제목
-st.title('🌟 sweet apple의 맞춤형 여행지 추천기 🌍')
+st.title('sweet apple의 맞춤형 여행지 추천기🌍')
 
 # 여행지 유형 선택
 st.write("🗺️ **선호하는 여행지 유형을 선택하세요!**")
