@@ -173,13 +173,5 @@ if preferences:
         st.write(rec)
     
     # 여행지 선택 및 추가 정보 요청
-    st.write("🔎 **추천된 여행지에 대해 더 알고 싶으신가요?**")
-    selected_destination = st.selectbox(
-        "자세히 알고 싶은 여행지를 선택하세요:",
-        options=[rec.split(' - ')[0] for rec in recommendations]  # 여행지 이름만 추출
-    )
-    
-    if selected_destination:
-        st.write(f"🌟 **{selected_destination}**에 대한 자세한 5일 여행 코스:")
-        detailed_itinerary = get_detailed_itinerary(selected_destination)
-        st.write(detailed_itinerary)
+    st.write("🔎 **추천된 여행지에 대해 더 알고 싶으신가요?** 아래에 자세히 물어보세요! ")
+
