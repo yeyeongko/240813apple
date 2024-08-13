@@ -1,4 +1,8 @@
 import streamlit as st
+import openai
+
+# OpenAI API 키 설정 (이미 설정되어 있다고 가정)
+openai.api_key = st.secrets["openai_api_key"]
 
 # 여행지 추천 데이터
 def get_recommendations(preferences):
@@ -23,8 +27,25 @@ def get_recommendations(preferences):
     
     return matched_recommendations
 
+# 여행지에 대한 상세 여행 코스를 OpenAI로부터 요청하는 함수
+def get_detailed_itinerary(destination):
+    prompt = (f"Create a detailed 5-day travel itinerary for {destination}. "
+              "Include key attractions, daily activities, dining options, and any travel tips. "
+              "The itinerary should be practical and enjoyable.")
+    
+    try:
+        response = openai.Completion.create(
+            model="text-davinci-003",
+            prompt=prompt,
+            max_tokens=800,
+            temperature=0.7
+        )
+        return response.choices[0].text.strip()
+    except Exception as e:
+        return f"An error occurred: {e}"
+
 # 웹 앱 제목
-st.title('sweet apple의 맞춤형 여행지 추천기🌍')
+st.title('🌟 맞춤형 여행지 추천기 🌍')
 
 # 여행지 유형 선택
 st.write("🗺️ **선호하는 여행지 유형을 선택하세요!**")
@@ -37,5 +58,18 @@ preferences = st.multiselect(
 if preferences:
     st.write("🔍 **당신에게 맞는 여행지 추천:**")
     recommendations = get_recommendations(preferences)
+    st.write("추천 여행지:")
     for rec in recommendations:
         st.write(rec)
+    
+    # 여행지 선택 및 추가 정보 요청
+    st.write("🔎 **추천된 여행지에 대해 더 알고 싶으신가요?**")
+    selected_destination = st.selectbox(
+        "자세히 알고 싶은 여행지를 선택하세요:",
+        options=[rec.split(' - ')[0] for rec in recommendations]  # 여행지 이름만 추출
+    )
+    
+    if selected_destination:
+        st.write(f"🌟 **{selected_destination}**에 대한 자세한 5일 여행 코스:")
+        detailed_itinerary = get_detailed_itinerary(selected_destination)
+        st.write(detailed_itinerary)
