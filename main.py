@@ -11,7 +11,7 @@ import settings
 #load_dotenv()
 
 # python -m streamlit run main.py
-st.title("🍎(이번 여름 휴가 코스, 내가 짜주마!)🦈")
+st.title("🍎이번 여름 휴가 코스, 내가 짜주마!🦈")
 
 config = settings.load_config()
 if "api_key" in config:
