@@ -136,8 +136,6 @@ def get_recommendations(preferences):
     
     return matched_recommendations
 
-# 웹 앱 제목
-st.title('🌟 맞춤형 여행지 추천기 🌍')
 
 # 여행지 유형 선택
 st.write("🗺️ **선호하는 여행지 유형을 선택하세요!**")
@@ -154,7 +152,7 @@ if preferences:
         st.write(rec)
 
 
-st.write("🗺️ **자세히 알고 싶으면 아래 똑똑이에게 질문해봐! **")
+st.write("**혹시 더 자세히 알고 싶으면 아래 gpt에게 질문해봐! **")
 
 
 
