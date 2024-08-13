@@ -13,6 +13,24 @@ import settings
 # python -m streamlit run main.py
 st.title("🍎이번 여름 휴가 코스, 내가 짜주마!🦈")
 
+# 여행지 유형 선택
+st.write("🗺️ **선호하는 여행지 유형을 선택하세요!**")
+preferences = st.multiselect(
+    '여행지 유형을 선택해 주세요:',
+    ['해변', '산', '도시', '역사', '자연', '문화', '모험', '휴양']
+)
+
+# 여행지 추천 출력
+if preferences:
+    st.write("🔍 **당신에게 맞는 여행지 추천:**")
+    recommendations = get_recommendations(preferences)
+    st.write("추천 여행지:")
+    for rec in recommendations:
+        st.write(rec)
+    
+    # 여행지 선택 및 추가 정보 요청
+    st.write("🔎 **추천된 여행지에 대해 더 알고 싶으신가요?** 아래에 자세히 물어보세요! ")
+
 config = settings.load_config()
 if "api_key" in config:
     st.session_state.api_key = config["api_key"]
@@ -154,24 +172,4 @@ def get_detailed_itinerary(destination):
     except Exception as e:
         return f"An error occurred: {e}"
 
-# 웹 앱 제목
-st.title('🌟 맞춤형 여행지 추천기 🌍')
-
-# 여행지 유형 선택
-st.write("🗺️ **선호하는 여행지 유형을 선택하세요!**")
-preferences = st.multiselect(
-    '여행지 유형을 선택해 주세요:',
-    ['해변', '산', '도시', '역사', '자연', '문화', '모험', '휴양']
-)
-
-# 여행지 추천 출력
-if preferences:
-    st.write("🔍 **당신에게 맞는 여행지 추천:**")
-    recommendations = get_recommendations(preferences)
-    st.write("추천 여행지:")
-    for rec in recommendations:
-        st.write(rec)
-    
-    # 여행지 선택 및 추가 정보 요청
-    st.write("🔎 **추천된 여행지에 대해 더 알고 싶으신가요?** 아래에 자세히 물어보세요! ")
 
