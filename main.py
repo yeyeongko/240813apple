@@ -13,49 +13,6 @@ import settings
 # python -m streamlit run main.py
 st.title("🍎이번 여름 휴가 코스, 내가 짜주마!🦈")
 
-import streamlit as st
-import openai
-import os
-
-# OpenAI API 키 설정
-def set_openai_api_key(api_key):
-    openai.api_key = api_key
-
-# 여행 코스 생성 함수
-def generate_travel_itinerary(destination):
-    prompt = f"Create an efficient and enjoyable travel itinerary for {destination}. Include key attractions, activities, and dining options. Make sure to suggest a daily plan for a 5-day trip."
-    
-    try:
-        response = openai.Completion.create(
-            model="text-davinci-003",  # 또는 원하는 모델
-            prompt=prompt,
-            max_tokens=300,
-            temperature=0.7
-        )
-        return response.choices[0].text.strip()
-    except Exception as e:
-        return f"An error occurred: {e}"
-
-# 웹 앱 제목
-st.title('🌟 여행 코스 추천기 🌍')
-
-# 사용자 입력: OpenAI API 키 설정
-api_key = st.text_input("🔑 OpenAI API Key", type="password")
-if api_key:
-    set_openai_api_key(api_key)
-    st.write("API 키가 설정되었습니다. 여행지를 입력해 주세요!")
-
-# 사용자 입력: 여행지
-destination = st.text_input('가고 싶은 여행지를 입력하세요!')
-
-# 여행 코스 생성 및 출력
-if destination:
-    with st.spinner('여행 코스를 생성 중입니다...'):
-        itinerary = generate_travel_itinerary(destination)
-        st.write(f"✈️ **{destination}**에 대한 추천 여행 코스:")
-        st.write(itinerary)
-
-
 config = settings.load_config()
 if "api_key" in config:
     st.session_state.api_key = config["api_key"]
@@ -72,6 +29,42 @@ if save_btn:
     settings.save_config({"api_key": api_key})
     st.session_state.api_key = api_key
     st.write("설정이 저장되었습니다.")
+
+import streamlit as st
+import openai
+
+# OpenAI API 키 설정 (이미 입력된 상태라고 가정)
+openai.api_key = st.secrets["openai_api_key"]
+
+# 여행 코스 생성 함수
+def generate_travel_itinerary(destination):
+    prompt = (f"Create a detailed and efficient 5-day travel itinerary for {destination}. "
+              "Include key attractions, activities, dining options, and travel tips. "
+              "Provide a daily plan and ensure it maximizes the enjoyment of the trip.")
+    
+    try:
+        response = openai.Completion.create(
+            model="text-davinci-003",  # 또는 다른 모델 사용 가능
+            prompt=prompt,
+            max_tokens=500,
+            temperature=0.7
+        )
+        return response.choices[0].text.strip()
+    except Exception as e:
+        return f"An error occurred: {e}"
+
+# 웹 앱 제목
+st.title('🌟 여행 코스 추천기 🌍')
+
+# 사용자 입력: 여행지
+destination = st.text_input('가고 싶은 여행지를 입력하세요!')
+
+# 여행 코스 생성 및 출력
+if destination:
+    with st.spinner('여행 코스를 생성 중입니다...'):
+        itinerary = generate_travel_itinerary(destination)
+        st.write(f"✈️ **{destination}**에 대한 추천 여행 코스:")
+        st.write(itinerary)
 
 
 # 처음 1번만 실행하기 위한 코드
